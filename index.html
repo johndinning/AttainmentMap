@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html lang='en'>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <title>Educated Population in Texas</title>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@TXHigherEdBoard" />
+  <meta name="twitter:creator" content="@johndinning"/>
+  <meta property="og:url" content="http://www.thecb.state.tx.us/apps/map/attainment/" />
+  <meta property="og:title" content="Texas' Educated Population" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="A map of the educational attainment of 25 to 34 year olds in Texas." />
+  <meta property="og:image" content="http://www.thecb.state.tx.us/apps/map/attainment/Resources/TwitterImage.png" />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' />
+  <link href='css/styles.css' rel='stylesheet' />
+  <link href='css/buttons.css' rel='stylesheet' />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-104524078-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+  <script type="text/javascript">
+  /*<![CDATA[*/
+  (function() {
+  var sz = document.createElement('script'); sz.type = 'text/javascript'; sz.async = true;
+  sz.src = '//siteimproveanalytics.com/js/siteanalyze_6039200.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz, s);
+  })();
+  /*]]>*/
+  </script>
+
+</head>
+
+<body>
+
+  <nav id="menu"></nav>
+  <div id='mapid'></div>
+
+  <div id='map-overlay'>
+    <div id="THECB"><a href="http://www.60x30tx.com/" target="_blank" rel="noopener noreferrer"> <img id=logo src="Resources/Logo_cut.png" alt="logo" style="width:100px;"> </a>
+      <h1>Texas' Educated Population Ages 25 to 34</h1>
+    </div>
+  </div>
+
+  <div id='legend'>
+    <div style='background: rgba(0, 95, 132, 1);color: white;margin-top:0%'><h3>Each dot represents about <span id='DotNumbers' style="font-size: 1.2em; font-weight:bold; font-style:italic"></span> people.</h3></div>
+    <h4>Higher Education Degree</h4>
+    <div id='GradPro' class='clickable'><span id='GradPro_' style='background-color: #005f84'></span>Graduate/Professional</div>
+    <div id='Bacc' class='clickable'><span id='Bacc_' style='background-color: #0097d2'></span>Bachelor's</div>
+    <div id='Assoc' class='clickable'><span id='Assoc_' style='background-color: #84ddff'></span>Associate</div>
+    <h4>Some Higher Education</h4>
+    <div id='SomeHE' class='clickable'><span id='SomeHE_' style='background-color: #f6d61a'></span>Certificate holders or non-completers</div> 
+    <h4>No Higher Education Degree</h4>
+    <div id='HSunder' class='clickable'><span id='HSunder_' style='background-color: #a81d40'></span>High school diploma or less</div> 
+    
+    <div id='info' style="font-size: 0.75em; margin-left: 10px;"><br>Additional information about the map is available <a href="Resources/AboutTheMap.html" target="_blank" rel="noopener noreferrer">here</a>.</div>
+  </div>
+
+    <script type="text/javascript" src="style.js"></script>
+    <script type="text/javascript" src="HERegionAttainmentScript.js"></script>
+
+
+</body>
+
+</html>
