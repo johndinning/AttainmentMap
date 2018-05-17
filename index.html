@@ -30,16 +30,6 @@
     ga('send', 'pageview');
   </script>
   
-  <script type="text/javascript">
-  /*<![CDATA[*/
-  (function() {
-  var sz = document.createElement('script'); sz.type = 'text/javascript'; sz.async = true;
-  sz.src = '//siteimproveanalytics.com/js/siteanalyze_6039200.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz, s);
-  })();
-  /*]]>*/
-  </script>
-
 </head>
 
 <body>
@@ -54,7 +44,7 @@
   </div>
 
   <div id='legend'>
-    <div style='background: rgba(0, 95, 132, 1);color: white;margin-top:0%'><h3>Each dot represents about <span id='DotNumbers' style="font-size: 1.2em; font-weight:bold; font-style:italic"></span> people.</h3></div>
+    <div id='legendheader'><h3>Each dot represents about <span id='DotNumbers'></span> people.</h3></div>
     <h4>Higher Education Degree</h4>
     <div id='GradPro' class='clickable'><span id='GradPro_' style='background-color: #005f84'></span>Graduate/Professional</div>
     <div id='Bacc' class='clickable'><span id='Bacc_' style='background-color: #0097d2'></span>Bachelor's</div>
@@ -64,8 +54,10 @@
     <h4>No Higher Education Degree</h4>
     <div id='HSunder' class='clickable'><span id='HSunder_' style='background-color: #a81d40'></span>High school diploma or less</div> 
     
-    <div id='info' style="font-size: 0.75em; margin-left: 10px;"><br>Additional information about the map is available <a href="Resources/AboutTheMap.html" target="_blank" rel="noopener noreferrer">here</a>.</div>
-  </div>
+    <div id='info' style="font-size: 0.75em; margin-left: 10px;"><br>Additional information about the map is available <a href="Resources/AboutTheMap.html" target="_blank" rel="noopener noreferrer">here</a>.
+      <a href="https://github.com/TexasHigherEducationCoordinatingBoard/AttainmentMap" target="_blank" rel="noopener noreferrer"> <img id=github src="Resources/GitHub-Mark-32px.png" alt="logo" style="width:16px;"> </a></div>
+    <div>
+    </div>
 
     <script type="text/javascript" src="style.js"></script>
     <script type="text/javascript" src="AttainmentScript.js"></script>

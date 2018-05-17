@@ -67,6 +67,17 @@ p {
   color: blue;
 }
 
+#legendheader {
+  background: rgba(0, 95, 132, 1);
+  color: white;
+  margin-top:0%
+}
+
+#DotNumbers {
+font-size: 1.2em; 
+font-weight:bold; 
+font-style:italic
+}
 
 #legend {
   left: 0px;
@@ -94,9 +105,13 @@ p {
   #map-overlay {width: 100%}
   h1 {text-align: center;}
   #THECB p {text-align: center;}
-  h3 {margin-bottom: 5px;}
+  #legendheader {
+    background: rgba(255, 255, 255, 0.5);
+    color: black;}
+  h3 {margin-bottom: 5px; font-size: 0.8em;}
+  #DotNumbers {font-size: 1em;}
   #legend h4 {display: none}
-  #legend {height: 170px;width: 240px}
+  #legend {height: 170px;}
   .mapboxgl-ctrl-top-right {display: none;}
   #menu {display: none;}
 }

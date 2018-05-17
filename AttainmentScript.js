@@ -139,6 +139,20 @@ map.on('load', function() {
         }
     }, 'state');
     map.addLayer({
+        "id": "TexasOutline",
+        "type": "line",
+        "source": {
+          'type': 'vector',
+          'url': 'mapbox://johndinning.7rzn4kl6'
+          },
+        'source-layer': 'Texas-d92wyb',
+        "paint": {
+          "line-color": "rgba(0,0,0, 1)",
+          "line-width": 2,
+          "line-opacity": 0.7
+        }
+      }, 'state');
+    map.addLayer({
       'id': 'Higher Education Regions',
       'type': 'line',
       'source': {

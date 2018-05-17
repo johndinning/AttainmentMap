@@ -213,37 +213,37 @@ const attainmentStyle={
         "fill-color": "rgba(243, 243, 228, 1)"
       }
     },
-    {
-      "id": "boundary",
-      "type": "line",
-      "source": "openmaptiles",
-      "source-layer": "boundary",
-      "maxzoom": 24,
-      "filter": [
-        "all",
-        [
-          "in",
-          "maritime",
-          0
-        ],
-        [
-          "in",
-          "admin_level",
-          2,
-          4
-        ]
-      ],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "line-dasharray": [
-          2,
-          0.5
-        ],
-        "line-color": "rgba(58, 57, 57, 1)"
-      }
-    },
+    // {
+    //   "id": "boundary",
+    //   "type": "line",
+    //   "source": "openmaptiles",
+    //   "source-layer": "boundary",
+    //   "maxzoom": 24,
+    //   "filter": [
+    //     "all",
+    //     [
+    //       "in",
+    //       "maritime",
+    //       0
+    //     ],
+    //     [
+    //       "in",
+    //       "admin_level",
+    //       2,
+    //       4
+    //     ]
+    //   ],
+    //   "layout": {
+    //     "visibility": "visible"
+    //   },
+    //   "paint": {
+    //     "line-dasharray": [
+    //       2,
+    //       0.5
+    //     ],
+    //     "line-color": "rgba(58, 57, 57, 1)"
+    //   }
+    // },
     {
       "id": "state",
       "type": "symbol",
