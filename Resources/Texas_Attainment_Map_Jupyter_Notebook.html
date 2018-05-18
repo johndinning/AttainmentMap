@@ -1,27 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-104524078-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-<title>Texas Attainment Map-singlePoint</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Texas Attainment Map</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script type="text/javascript">
-/*<![CDATA[*/
-(function() {
-var sz = document.createElement('script'); sz.type = 'text/javascript'; sz.async = true;
-sz.src = '//siteimproveanalytics.com/js/siteanalyze_6039200.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz, s);
-})();
-/*]]>*/
-</script>
 
 <style type="text/css">
     /*!
@@ -11798,8 +11779,8 @@ div#notebook {
 <ul>
 <li>2010 census block polygons for Texas</li>
 <li>2010 census table P1, Total Population, for census blocks</li>
-<li>2011-2015 5-year summary statistics for table B15001, educational attainment by age for each census tract. The census tract field (GISJOIN) will be used to merge the data to the census tract polygons.</li>
-<li>2015 census tract polygons (we downloaded the entire US census tract file, you will only need Texas)</li>
+<li>2012-2016 5-year summary statistics for table B15001, educational attainment by age for each census tract. The census tract field (GISJOIN) will be used to merge the data to the census tract polygons.</li>
+<li>2016 census tract polygons (we downloaded the entire US census tract file, you will only need Texas)</li>
 </ul>
 <h3 id="You-will-need-access-to:">You will need access to:<a class="anchor-link" href="#You-will-need-access-to:">&#182;</a></h3><ul>
 <li>ArcGIS (peferably with the advanced license - however, there are workarounds if you only have the basic license)</li>
@@ -11821,11 +11802,45 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">overwriteOutput</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">randomGenerator</span> <span class="o">=</span> <span class="s2">&quot;5 MERSENNE_TWISTER&quot;</span> <span class="c1"># set seed for random dots </span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">qualifiedFieldNames</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;</span><span class="se"></span><span class="s1">PUT_YOUR_FILE_PATH_HERE&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Create a File Geodatabase to store the NoPopBlocks </span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">CreateFileGDB_management</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;Attainment.gdb&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[2]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;Result &#39;data\\Attainment.gdb&#39;&gt;</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -11836,7 +11851,7 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Identify-the-places-where-there-shouldn't-be-any-dots">Identify the places where there shouldn't be any dots<a class="anchor-link" href="#Identify-the-places-where-there-shouldn't-be-any-dots">&#182;</a></h1><p>Census tracts include bodies of water, airports, and parks - places where people don't usually live.</p>
 <p>Here is a census tract near downtown in Austin, Texas.
-<img src="IMAGE1.png" alt="image.png"></p>
+<img src="attachment:image.png" alt="image.png"></p>
 <p>In order to avoid placing a dot representing 25 people with a bachelor's degree in the middle of Lady Bird Lake, or on a highway, or in a park, we will need adjust the census tract polygons. We do this using the much smaller census blocks from the 2010 census.</p>
 <p>Download and unzip the files from NHGIS. We'll begin by identifying all of the census blocks form the 2010 census with a population of zero. (Note: these census blocks with zero population highways and waterways that can divide entire census tracts.)</p>
 
@@ -11845,21 +11860,17 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#######</span>
 <span class="c1">#Create NoPopBlocks from data downloaded from NHGIS</span>
 <span class="c1">#######</span>
 
-<span class="c1">#File for UN-ZIPPED NHGIS data is: &quot;AttainmentMap/OriginalDownloadfromNHGIS/&quot;</span>
-
-
 <span class="c1">#The CensusBlock CSV file for Texas where H7v001=0 [i.e. population=0]</span>
 
-
 <span class="c1">#Convert zipped CensusBlock csv file to dBase and limit to just Texas blocks where population=0.</span>
-<span class="n">CensusBlocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0004_csv/nhgis0004_ds172_2010_block.csv&quot;</span><span class="p">,</span>  <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">39</span><span class="p">])</span>
+<span class="n">CensusBlocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0005_csv/nhgis0005_ds172_2010_block.csv&quot;</span><span class="p">,</span>  <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">39</span><span class="p">])</span>
 
 <span class="n">NoPopBlocks</span><span class="o">=</span><span class="n">CensusBlocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">CensusBlocks</span><span class="p">[</span><span class="s1">&#39;H7V001&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">]</span>
 
@@ -11868,7 +11879,7 @@ div#notebook {
 <span class="nb">print</span><span class="p">(</span><span class="n">NoPopBlocks</span><span class="p">)</span>
 
 <span class="c1">#Save NoPopBlocks as a CSV</span>
-<span class="n">NoPopBlocks</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;data/NoPopBlocks.csv&#39;</span><span class="p">)</span>
+<span class="n">NoPopBlocks</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;data/NoPopBlocks.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11909,51 +11920,17 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Create a File Geodatabase to store the NoPopBlocks </span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">CreateFileGDB_management</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;Attainment.gdb&quot;</span><span class="p">)</span>
-
-<span class="c1">#Get the NoPopBlocks table into the geodatabase</span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">TableToTable_conversion</span><span class="p">(</span><span class="s2">&quot;data/NoPopBlocks.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">,</span> <span class="s2">&quot;NoPopBlocksTable&quot;</span><span class="p">)</span>
-
-<span class="c1">#Index GISJOIN fields for improved performamce</span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">AddIndex_management</span> <span class="p">(</span><span class="s2">&quot;data/Attainment.gdb/NoPopBlocksTable&quot;</span><span class="p">,</span> <span class="s2">&quot;GISJOIN&quot;</span><span class="p">,</span> <span class="s2">&quot;index1&quot;</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[3]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;Result &#39;data/Attainment.gdb/NoPopBlocksTable&#39;&gt;</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Put TX census block polygons in GDB.</span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">FeatureClassToGeodatabase_conversion</span><span class="p">(</span><span class="s2">&quot;data/blocks/TX_block_2010.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Get the NoPopBlocks table into the geodatabase</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">TableToTable_conversion</span><span class="p">(</span><span class="s2">&quot;data/NoPopBlocks.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">,</span> <span class="s2">&quot;NoPopBlocksTable&quot;</span><span class="p">)</span>
+
+<span class="c1">#Put TX census block polygons in GDB.</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">FeatureClassToGeodatabase_conversion</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0005_shapefile_tl2010_480_block_2010/TX_block_2010.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">)</span>
+
+<span class="c1">#Index GISJOIN fields for improved performamce</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">AddIndex_management</span> <span class="p">(</span><span class="s2">&quot;data/Attainment.gdb/NoPopBlocksTable&quot;</span><span class="p">,</span> <span class="s2">&quot;GISJOIN&quot;</span><span class="p">,</span> <span class="s2">&quot;index1&quot;</span><span class="p">)</span>
 
 <span class="c1">#Index GISJOIN fields for improved performamce</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">AddIndex_management</span> <span class="p">(</span><span class="s2">&quot;data/Attainment.gdb/TX_block_2010&quot;</span><span class="p">,</span> <span class="s2">&quot;GISJOIN&quot;</span><span class="p">,</span> <span class="s2">&quot;index2&quot;</span><span class="p">)</span>
@@ -12007,7 +11984,7 @@ div#notebook {
 <span class="n">expression</span> <span class="o">=</span> <span class="s2">&quot;NoPopBlocksTable.H7V001 = 0&quot;</span>
     
 <span class="c1">#Load TX 2010 Census Blocks as Feature Layer</span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">MakeFeatureLayer_management</span><span class="p">(</span><span class="s2">&quot;data/blocks/TX_block_2010.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;TX_BlocksLayer&quot;</span><span class="p">)</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">MakeFeatureLayer_management</span><span class="p">(</span><span class="s2">&quot;data/Attainment.gdb/TX_block_2010&quot;</span><span class="p">,</span> <span class="s2">&quot;TX_BlocksLayer&quot;</span><span class="p">)</span>
     
 <span class="c1"># Join the feature layer to a table. Use KEEP_COMMON to eleiminate need for arcpy.SelectLayerByAttribute_management()</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">AddJoin_management</span><span class="p">(</span><span class="n">layerName</span><span class="p">,</span> <span class="n">joinField</span><span class="p">,</span> <span class="n">joinTable</span><span class="p">,</span> <span class="n">joinField</span><span class="p">)</span>
@@ -12016,8 +11993,6 @@ div#notebook {
     
 <span class="c1"># Copy the layer to a new permanent feature class</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">CopyFeatures_management</span><span class="p">(</span><span class="n">layerName</span><span class="p">,</span> <span class="n">outFeature</span><span class="p">)</span>
-
-    
 </pre></div>
 
 </div>
@@ -12049,8 +12024,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Now-we-can-see-all-the-2010-census-blocks-with-zero-population-(shown-below-in-grey).">Now we can see all the 2010 census blocks with zero population (shown below in grey).<a class="anchor-link" href="#Now-we-can-see-all-the-2010-census-blocks-with-zero-population-(shown-below-in-grey).">&#182;</a></h1><p>Here we see that the lake, the highway, the park, and a lot of commercial areas of downtown Austin have census blocks with population=0.</p>
-<p><img src="IMAGE2.png" alt="image.png"></p>
+<h1 id="Now-we-can-see-all-the-2010-census-blocks-with-zero-population-(shown-below-in-grey).">Now we can see all the 2010 census blocks with zero population (shown below in grey).<a class="anchor-link" href="#Now-we-can-see-all-the-2010-census-blocks-with-zero-population-(shown-below-in-grey).">&#182;</a></h1><p>Here we see the areas in grey where the population from the 2010 census was equal to 0. These areas include the lake, the highway, the park, and a lot of commercial areas of downtown Austin.</p>
+<p><img src="attachment:image.png" alt="image.png"></p>
 
 </div>
 </div>
@@ -12060,9 +12035,9 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Now-we'll-poke-holes-in-the-census-tracts-using-the-census-block-with-zero-population">Now we'll poke holes in the census tracts using the census block with zero population<a class="anchor-link" href="#Now-we'll-poke-holes-in-the-census-tracts-using-the-census-block-with-zero-population">&#182;</a></h1><p>Thanks to Prof. Walker at TCU for posting <a href="https://github.com/walkerke/education_map">his python code</a> on how to do this.</p>
-<p>Note: You will need the <em>advanced</em> ArcGIS license to use the erase tool. However, you can use the union tool to join the data for both layers and get the same result. Western Washington University has a helpful how-to <a href="http://www.wwu.edu/huxley/spatial/tut/erase.htm">here</a>.</p>
-<p>What will be left of our census tracts is shown below in green.</p>
-<p><img src="IMAGE3.png" alt="image.png"></p>
+<h3 id="The-blue-outline-shows-a-complete-census-tract,-but-here-we-modify-it-to-remove-the-areas-with-zero-population.">The blue outline shows a complete census tract, but here we modify it to remove the areas with zero population.<a class="anchor-link" href="#The-blue-outline-shows-a-complete-census-tract,-but-here-we-modify-it-to-remove-the-areas-with-zero-population.">&#182;</a></h3><h3 id="The-remaining-area-shown-in-green-is-the-modified-census-tract.">The remaining area shown in green is the modified census tract.<a class="anchor-link" href="#The-remaining-area-shown-in-green-is-the-modified-census-tract.">&#182;</a></h3><p>Note: You will need the <em>advanced</em> ArcGIS license to use the erase tool. However, you can use the union tool to join the data for both layers and get the same result. Western Washington University has a helpful how-to <a href="http://www.wwu.edu/huxley/spatial/tut/erase.htm">here</a>.</p>
+<p>What will be left of our census tracts is whown below in green.</p>
+<p><img src="attachment:image.png" alt="image.png"></p>
 
 </div>
 </div>
@@ -12075,7 +12050,7 @@ div#notebook {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Load Texas Census Tracts</span>
 
 <span class="c1">#Make temporary CensusTract Layer</span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">MakeFeatureLayer_management</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0001_shape/us_tract_2015.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;CensusTractLayer&quot;</span><span class="p">)</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">MakeFeatureLayer_management</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0006_shapefile_tl2016_us_tract_2016/us_tract_2016.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;CensusTractLayer&quot;</span><span class="p">)</span>
 
 <span class="c1">#Select just the TX Census Tracts and save in GDB</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">SelectLayerByAttribute_management</span><span class="p">(</span><span class="s2">&quot;CensusTractLayer&quot;</span><span class="p">,</span> <span class="s2">&quot;NEW_SELECTION&quot;</span><span class="p">,</span> <span class="s2">&quot; STATEFP = &#39;48&#39; &quot;</span><span class="p">)</span>
@@ -12141,7 +12116,7 @@ div#notebook {
 <span class="c1"># Now, specify the where clause and dissolve</span>
 <span class="n">area_clause</span> <span class="o">=</span> <span class="s1">&#39;&quot;POLY_AREA&quot; &gt;= 5000&#39;</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">SelectLayerByAttribute_management</span><span class="p">(</span><span class="n">singlepart_layer</span><span class="p">,</span> <span class="s2">&quot;NEW_SELECTION&quot;</span><span class="p">,</span> <span class="n">area_clause</span><span class="p">)</span>
-<span class="n">out_dissolve</span> <span class="o">=</span> <span class="s2">&quot;data/scratch/DissolvedSinglepartTracts.shp&quot;</span>
+<span class="n">out_dissolve</span> <span class="o">=</span> <span class="s2">&quot;data/DissolvedSinglepartTracts.shp&quot;</span>
 
 <span class="n">arcpy</span><span class="o">.</span><span class="n">Dissolve_management</span><span class="p">(</span><span class="n">singlepart_layer</span><span class="p">,</span> <span class="n">out_dissolve</span><span class="p">,</span> <span class="n">dissolve_field</span> <span class="o">=</span> <span class="s2">&quot;GISJOIN&quot;</span><span class="p">)</span>
 </pre></div>
@@ -12156,29 +12131,13 @@ div#notebook {
 
 <div class="output_area">
 
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.py:31: SyntaxWarning: name &#39;hasZ&#39; is assigned to before global declaration
-  global hasZ
-c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.py:32: SyntaxWarning: name &#39;hasM&#39; is assigned to before global declaration
-  global hasM
-c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.py:67: SyntaxWarning: name &#39;ucurFields&#39; is assigned to before global declaration
-  global ucurFields
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 <div class="prompt output_prompt">Out[7]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;Result &#39;data\\scratch\\DissolvedSinglepartTracts.shp&#39;&gt;</pre>
+<pre>&lt;Result &#39;data\\DissolvedSinglepartTracts.shp&#39;&gt;</pre>
 </div>
 
 </div>
@@ -12191,33 +12150,27 @@ c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.p
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Prepare-the-NHGIS-attainment-data-by-census-tract-needs-before-continuing-to-the-next-step.">Prepare the NHGIS attainment data by census tract needs before continuing to the next step.<a class="anchor-link" href="#Prepare-the-NHGIS-attainment-data-by-census-tract-needs-before-continuing-to-the-next-step.">&#182;</a></h2><p>I used SAS to generate the number of dots per level of attainment at each scale (1 dot =10 people, 25 people, 50 people, 100 people, and 150 people) for each census tract (GISJOIN field).</p>
+<h2 id="Prepare-the-NHGIS-attainment-data-by-census-tract--before-continuing-to-the-next-step.">Prepare the NHGIS attainment data by census tract  before continuing to the next step.<a class="anchor-link" href="#Prepare-the-NHGIS-attainment-data-by-census-tract--before-continuing-to-the-next-step.">&#182;</a></h2><p>I used SAS to generate the number of dots per level of attainment at each scale (1 dot =10 people, 25 people, 50 people, 100 people, and 150 people) for each census tract (GISJOIN field).</p>
 <p>The output file is: <em>data\NHGIS0001_PreparedForMerge.csv</em></p>
-<h3 id="I-used-the-following-SAS-code-for-preparing-the-NHGIS-attainment-data:">I used the following SAS code for preparing the NHGIS attainment data:<a class="anchor-link" href="#I-used-the-following-SAS-code-for-preparing-the-NHGIS-attainment-data:">&#182;</a></h3><div class="highlight"><pre><span></span><span class="cm">/* This program takes the raw attainment data in the ACS B15001 table from NHGIS and </span>
-<span class="cm">prepares the number of dots to show by census tract at different scales (10, 25, 50, 100, 150).</span>
-<span class="cm">These scales will correspond to different zoom levels in the final map.</span>
-<span class="cm">*/</span>
-
-<span class="kr">PROC IMPORT </span><span class="k">OUT</span>= WORK<span class="m">.</span>NHGIS0001
-            DATAFILE= <span class="s">&quot;~\data\OriginalDownloadfromNHGIS\nhgis0001_csv\nhgis0001_csv\nhgis0001_ds216_20155_2015_tract.csv&quot;</span> DBMS=CSV <span class="k">REPLACE</span>;
+<h3 id="I-used-the-following-SAS-code-for-preparing-the-NHGIS-attainment-data:">I used the following SAS code for preparing the NHGIS attainment data:<a class="anchor-link" href="#I-used-the-following-SAS-code-for-preparing-the-NHGIS-attainment-data:">&#182;</a></h3><div class="highlight"><pre><span></span><span class="kr">PROC IMPORT </span><span class="k">OUT</span>= WORK<span class="m">.</span>NHGIS0001
+            DATAFILE= <span class="s">&quot;data\OriginalDownloadfromNHGIS\nhgis0005_csv\nhgis0005_ds226_20165_2016_tract.csv&quot;</span>            
+     DBMS=CSV <span class="k">REPLACE</span>;
      GETNAMES=YES;
      DATAROW=<span class="m">2</span><span class="kr">; </span>
 <span class="kr">RUN;</span>
 
-<span class="cm">/* Keep the GISJOIN field and make the following new variables: </span>
-<span class="cm">            High School or less, Some college no degree, Associates,  </span>
-<span class="cm">            Bachelor&#39;s, Graduate or Professional Degree </span>
-<span class="cm">*/</span>
-
+<span class="cm">/* Keep the GISJOIN field and make the following new variables:   </span>
+<span class="cm">            High School or less, Some college no degree, Associates,   </span>
+<span class="cm">            Bachelor&#39;s, Graduate or Professional Degree */</span>
 <span class="kr">data </span>AttainmentRaw;
-    <span class="k">set</span> NHGIS0001;
-    <span class="k">where</span> STATEA=<span class="s">&#39;48&#39;</span>;
-        Assoc = AD0PE016 + AD0PE057;
-        Bacc =  AD0PE017 + AD0PE058;
-        GradPro =  AD0PE018 + AD0PE059;
-        SomeHE = AD0PE015 + AD0PE056;
-        HSorLess = AD0PE012 + AD0PE013 + AD0PE014 + AD0PE053 + AD0PE054 + AD0PE055;
-        TotalPop =  AD0PE001<span class="kr">;</span>
+<span class="k">set</span> NHGIS0001;
+<span class="k">where</span> STATEA=<span class="s">&#39;48&#39;</span>;
+    Assoc = AGIEE016 + AGIEE057;
+    Bacc =  AGIEE017 + AGIEE058;
+    GradPro =  AGIEE018 + AGIEE059;
+    SomeHE = AGIEE015 + AGIEE056;
+    HSorLess = AGIEE012 + AGIEE013 + AGIEE014 + AGIEE053 + AGIEE054 + AGIEE055;
+    TotalPop =  AGIEE001<span class="kr">;</span>
 <span class="kr">run;</span>
 
 
@@ -12258,8 +12211,10 @@ c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.p
 
 <span class="kr">run;</span>
 
+
+
 <span class="kr">proc export </span>data=work<span class="m">.</span>AttainmentbyCensusTract
-            outfile=<span class="s">&quot;~\data\NHGIS0001_PreparedForMerge.csv&quot;</span> 
+            outfile=<span class="s">&quot;data\DotCounts_PreparedForMerge.csv&quot;</span> 
             dbms=csv <span class="k">replace</span><span class="kr">;</span>
 <span class="kr">run;</span>
 </pre></div>
@@ -12275,13 +12230,13 @@ c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.p
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Merge the Dissolved_back_to_Tracks polygons with the .xls file exported from sas with the number of dots per tract</span>
 
 <span class="c1">#Get .xls into GDB</span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">TableToTable_conversion</span><span class="p">(</span><span class="s2">&quot;data/NHGIS0001_PreparedForMerge.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">,</span> <span class="s2">&quot;AttainmentData_SASoutput&quot;</span><span class="p">)</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">TableToTable_conversion</span><span class="p">(</span><span class="s2">&quot;data/DotCounts_PreparedForMerge.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">,</span> <span class="s2">&quot;AttainmentData_SASoutput&quot;</span><span class="p">)</span>
 
 <span class="c1">#Index GISJOIN field for improved performamce</span>
 <span class="c1">#arcpy.AddIndex_management (&quot;data/Attainment.gdb/JoinedAttainmentData_DasymetricTracts&quot;, &quot;GISJOIN&quot;, &quot;GISIndex&quot;)</span>
 
 <span class="c1"># Join the feature layer to a SAS output table</span>
-<span class="n">inFeatures</span> <span class="o">=</span> <span class="s2">&quot;data/scratch/DissolvedSinglepartTracts.shp&quot;</span>
+<span class="n">inFeatures</span> <span class="o">=</span> <span class="s2">&quot;data/DissolvedSinglepartTracts.shp&quot;</span>
 <span class="n">layerName</span> <span class="o">=</span> <span class="s2">&quot;JoinedAttainmentData_DasymetricLayer&quot;</span>
 <span class="n">joinTable</span> <span class="o">=</span> <span class="s2">&quot;data/Attainment.gdb/AttainmentData_SASoutput&quot;</span>
 <span class="n">joinField</span> <span class="o">=</span> <span class="s2">&quot;GISJOIN&quot;</span>
@@ -12295,6 +12250,9 @@ c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.p
 
 <span class="c1"># Copy the layer to a new permanent feature class</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">CopyFeatures_management</span><span class="p">(</span><span class="n">layerName</span><span class="p">,</span> <span class="n">outFeature</span><span class="p">)</span>
+
+<span class="c1"># Delete the temporary dissolved tracks shapefile</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">Delete_management</span><span class="p">(</span><span class="s2">&quot;data/DissolvedSinglepartTracts.shp&quot;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12313,7 +12271,7 @@ c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.p
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;Result &#39;data\\Attainment.gdb\\JoinedAttainmentData_DasymetricTracts&#39;&gt;</pre>
+<pre>&lt;Result &#39;true&#39;&gt;</pre>
 </div>
 
 </div>
@@ -12381,7 +12339,12 @@ c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.p
 <div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">arcmap_to_geojson</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#make a folder if it doesn&#39;t exist</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;data/Shapefiles&quot;</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;data/Shapefiles&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">arcmap_to_geojson</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
         <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Assoc&quot;</span><span class="p">,</span> <span class="s2">&quot;Bacc&quot;</span><span class="p">,</span> <span class="s2">&quot;GradPro&quot;</span><span class="p">,</span> <span class="s2">&quot;HSunder&quot;</span><span class="p">,</span> <span class="s2">&quot;SomeHE&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">levels</span><span class="p">:</span>
             <span class="n">layername</span> <span class="o">=</span> <span class="n">level</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
@@ -12401,7 +12364,7 @@ c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.p
     
     <span class="n">arcpy</span><span class="o">.</span><span class="n">Merge_management</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">CombinedFeature</span><span class="p">)</span>
     <span class="n">arcpy</span><span class="o">.</span><span class="n">management</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="n">CombinedFeature</span><span class="p">,</span> <span class="n">OutFeature</span><span class="p">,</span> <span class="n">arcpy</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">(</span><span class="mi">4326</span><span class="p">))</span>
-    <span class="n">arcpy</span><span class="o">.</span><span class="n">FeatureClassToShapefile_conversion</span> <span class="p">(</span><span class="n">OutFeature</span><span class="p">,</span> <span class="s2">&quot;data/scratch&quot;</span><span class="p">)</span>
+    <span class="n">arcpy</span><span class="o">.</span><span class="n">FeatureClassToShapefile_conversion</span> <span class="p">(</span><span class="n">OutFeature</span><span class="p">,</span> <span class="s2">&quot;data/Shapefiles&quot;</span><span class="p">)</span>
                 
 <span class="n">scales</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">scales</span><span class="p">:</span>
@@ -12419,14 +12382,29 @@ c:\program files\arcgis\pro\Resources\ArcToolbox\Scripts\AddGeometryAttributes.p
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Now-we-can-see-the-dots-on-a-map!">Now we can see the dots on a map!<a class="anchor-link" href="#Now-we-can-see-the-dots-on-a-map!">&#182;</a></h1><p>The image below shows all of the dots in blue for scale=25. You can control the color using the 'Level' field later to contrast different degree types. Remember, the placement of the dots within the dasymetric census tract in random so a repeat of this process won't have dots in exactely the same place. But the number of dots per census tract would remain the same.</p>
-<p><img src="IMAGE4.png" alt="image.png"></p>
-<h1 id="From-here-you-can-upload-the-shapefiles-to-a-service-like-Mapbox-or-make-your-own-.mbtiles-using-open-source-tools.">From here you can upload the shapefiles to a service like Mapbox or make your own .mbtiles using open source tools.<a class="anchor-link" href="#From-here-you-can-upload-the-shapefiles-to-a-service-like-Mapbox-or-make-your-own-.mbtiles-using-open-source-tools.">&#182;</a></h1><p>For diehard SAS users, there is a new proc json command in SAS 9.4. We got our geojson using that. But the code isn't pretty. Contact  john.dinning@thecb.state.tx.us for a copy of the code. Ogr2ogr is much easier!</p>
-<h3 id="You-can-use-the-ogr2ogr-tool-from-the-open-source-GDAL/OGR-library-to-convert-the-shapefiles-to-GeoJSON.">You can use the <a href="http://www.gdal.org/">ogr2ogr tool from the open source GDAL/OGR library</a> to convert the shapefiles to GeoJSON.<a class="anchor-link" href="#You-can-use-the-ogr2ogr-tool-from-the-open-source-GDAL/OGR-library-to-convert-the-shapefiles-to-GeoJSON.">&#182;</a></h3><p>Once you have installed GDAL, you can run the tool in the command line that takes the shapefile of dots for each zoom level. The following was for zoom-level range where each dot represented about 150 people:</p>
+<p><img src="attachment:image.png" alt="image.png"></p>
+<h1 id="From-here-you-can-upload-the-shapefiles-to-a-service-like-Mapbox-Studio">From here you can upload the shapefiles to a service like Mapbox Studio<a class="anchor-link" href="#From-here-you-can-upload-the-shapefiles-to-a-service-like-Mapbox-Studio">&#182;</a></h1><p>This does not require linux, or bash on the newer versions of Windows 10, but mapbox may limit you to their pre-defined zoom levels.</p>
+<h1 id="Or,-define-your-own-zoom-levels-by-making-.MBtiles-using-open-source-tools.">Or, define your own zoom levels by making .MBtiles using open source tools.<a class="anchor-link" href="#Or,-define-your-own-zoom-levels-by-making-.MBtiles-using-open-source-tools.">&#182;</a></h1><p>We made our own .MBtiles and then uploaded them to Mapbox to be served.</p>
+<h3 id="Frst,-use-the-ogr2ogr-tool-from-the-open-source-GDAL/OGR-library-to-convert-the-shapefiles-to-GeoJSON.">Frst, use the <a href="http://www.gdal.org/">ogr2ogr tool from the open source GDAL/OGR library</a> to convert the shapefiles to GeoJSON.<a class="anchor-link" href="#Frst,-use-the-ogr2ogr-tool-from-the-open-source-GDAL/OGR-library-to-convert-the-shapefiles-to-GeoJSON.">&#182;</a></h3><p>Installed GDAL. Make a new, empty folder data/geojson. Using the command line, cd into the /data folder and run the tool with the following commands to convert each of the Shapefiles to geojson:</p>
 
-<pre><code>ogr2ogr -f GeoJSON geojson/Attainment150.json Shapefiles/Attainment150.shp -progress</code></pre>
-<p>This outputs the points as a .json file of point data.</p>
-<h3 id="The-tippecanoe-tool-takes-.json-data-to-make-.MBtiles.-Read-the-full-documentation-on-GitHub-for-best-results.-We-used-tippecanoe-with-the-following-options:">The <a href="https://github.com/mapbox/tippecanoe">tippecanoe tool</a> takes .json data to make .MBtiles. Read the full documentation on GitHub for best results. We used tippecanoe with the following options:<a class="anchor-link" href="#The-tippecanoe-tool-takes-.json-data-to-make-.MBtiles.-Read-the-full-documentation-on-GitHub-for-best-results.-We-used-tippecanoe-with-the-following-options:">&#182;</a></h3>
-<pre><code>tippecanoe --output=Attainment150.mbtiles geojson/Attainment150.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=7 --minimum-zoom=5 --exclude=CID</code></pre>
+<pre><code>ogr2ogr -f GeoJSON geojson/Attainment10.json Shapefiles/Attainment10.shp -progress
+ogr2ogr -f GeoJSON geojson/Attainment25.json Shapefiles/Attainment25.shp -progress
+ogr2ogr -f GeoJSON geojson/Attainment50.json Shapefiles/Attainment50.shp -progress
+ogr2ogr -f GeoJSON geojson/Attainment100.json Shapefiles/Attainment100.shp -progress
+ogr2ogr -f GeoJSON geojson/Attainment150.json Shapefiles/Attainment150.shp -progress</code></pre>
+<p>This outputs .json files of point data.</p>
+<h3 id="The-tippecanoe-tool-takes-.json-data-to-make-.MBtiles.-Read-the-full-documentation-on-GitHub-for-best-results.-We-used-tippecanoe-with-the-following-options-for-the-different-zoom-levels:">The <a href="https://github.com/mapbox/tippecanoe">tippecanoe tool</a> takes .json data to make .MBtiles. Read the full documentation on GitHub for best results. We used tippecanoe with the following options for the different zoom levels:<a class="anchor-link" href="#The-tippecanoe-tool-takes-.json-data-to-make-.MBtiles.-Read-the-full-documentation-on-GitHub-for-best-results.-We-used-tippecanoe-with-the-following-options-for-the-different-zoom-levels:">&#182;</a></h3><p>Install tippecanoe and run the following from the /data folder:</p>
+
+<pre><code>tippecanoe --output=Attainment150.mbtiles geojson/Attainment150.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=7 --minimum-zoom=5 --exclude=CID
+tippecanoe --output=Attainment100.mbtiles geojson/Attainment100.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=9 --minimum-zoom=7 --exclude=CID
+tippecanoe --output=Attainment50.mbtiles geojson/Attainment50.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=11 --minimum-zoom=9 --exclude=CID
+tippecanoe --output=Attainment25.mbtiles geojson/Attainment25.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=13 --minimum-zoom=11 --exclude=CID
+tippecanoe --output=Attainment10.mbtiles geojson/Attainment10.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=16.2 --minimum-zoom=13 --exclude=CID</code></pre>
+<h3 id="Finally,-make-things-easier-by-combining-the-.MBtiles-into-a-single-source-with-tile-join.">Finally, make things easier by combining the .MBtiles into a single source with tile-join.<a class="anchor-link" href="#Finally,-make-things-easier-by-combining-the-.MBtiles-into-a-single-source-with-tile-join.">&#182;</a></h3><p>tile-join comes with tippecanoe. Combine the .MBtiles with the following:</p>
+
+<pre><code>tile-join -o Attainment2012_2016.mbtiles Attainment150.mbtiles Attainment100.mbtiles Attainment50.mbtiles Attainment25.mbtiles Attainment10.mbtiles</code></pre>
+<p>You can serve your own MBtiles. We upload ours to Mapbox Studio.</p>
+<p>For questions about this code, contact John Dinning at <a href="mailto:john.dinning@THECB.state.tx.us">john.dinning@THECB.state.tx.us</a></p>
 
 </div>
 </div>
