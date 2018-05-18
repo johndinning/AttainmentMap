@@ -27,7 +27,8 @@ h3 {
 
 h4 {
   font-size: .85em;
-    margin: 10px;
+  margin: 10px;
+  margin-bottom: 5px;
 }
 
 p {
@@ -81,7 +82,7 @@ font-style:italic
 
 #legend {
   left: 0px;
-  height: 275px;
+  height: 285px;
   margin-bottom: 30px;
   width: 230px;
   position: absolute;
@@ -97,6 +98,13 @@ font-style:italic
   height: 10px;
   margin-right: 5px;
   width: 10px;
+}
+
+#info img {
+  width:20px; 
+  float: right; 
+  margin-right: 30px;
+  margin-left: 15px;
 }
 
 /*Hide Logo on mobile*/

@@ -11851,7 +11851,7 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Identify-the-places-where-there-shouldn't-be-any-dots">Identify the places where there shouldn't be any dots<a class="anchor-link" href="#Identify-the-places-where-there-shouldn't-be-any-dots">&#182;</a></h1><p>Census tracts include bodies of water, airports, and parks - places where people don't usually live.</p>
 <p>Here is a census tract near downtown in Austin, Texas.
-<img src="attachment:image.png" alt="image.png"></p>
+<img src="../Resources/IMAGE1.png" alt="image.png"></p>
 <p>In order to avoid placing a dot representing 25 people with a bachelor's degree in the middle of Lady Bird Lake, or on a highway, or in a park, we will need adjust the census tract polygons. We do this using the much smaller census blocks from the 2010 census.</p>
 <p>Download and unzip the files from NHGIS. We'll begin by identifying all of the census blocks form the 2010 census with a population of zero. (Note: these census blocks with zero population highways and waterways that can divide entire census tracts.)</p>
 
@@ -12025,7 +12025,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Now-we-can-see-all-the-2010-census-blocks-with-zero-population-(shown-below-in-grey).">Now we can see all the 2010 census blocks with zero population (shown below in grey).<a class="anchor-link" href="#Now-we-can-see-all-the-2010-census-blocks-with-zero-population-(shown-below-in-grey).">&#182;</a></h1><p>Here we see the areas in grey where the population from the 2010 census was equal to 0. These areas include the lake, the highway, the park, and a lot of commercial areas of downtown Austin.</p>
-<p><img src="attachment:image.png" alt="image.png"></p>
+<p><img src="../Resources/IMAGE2.png" alt="image.png"></p>
 
 </div>
 </div>
@@ -12037,7 +12037,7 @@ div#notebook {
 <h1 id="Now-we'll-poke-holes-in-the-census-tracts-using-the-census-block-with-zero-population">Now we'll poke holes in the census tracts using the census block with zero population<a class="anchor-link" href="#Now-we'll-poke-holes-in-the-census-tracts-using-the-census-block-with-zero-population">&#182;</a></h1><p>Thanks to Prof. Walker at TCU for posting <a href="https://github.com/walkerke/education_map">his python code</a> on how to do this.</p>
 <h3 id="The-blue-outline-shows-a-complete-census-tract,-but-here-we-modify-it-to-remove-the-areas-with-zero-population.">The blue outline shows a complete census tract, but here we modify it to remove the areas with zero population.<a class="anchor-link" href="#The-blue-outline-shows-a-complete-census-tract,-but-here-we-modify-it-to-remove-the-areas-with-zero-population.">&#182;</a></h3><h3 id="The-remaining-area-shown-in-green-is-the-modified-census-tract.">The remaining area shown in green is the modified census tract.<a class="anchor-link" href="#The-remaining-area-shown-in-green-is-the-modified-census-tract.">&#182;</a></h3><p>Note: You will need the <em>advanced</em> ArcGIS license to use the erase tool. However, you can use the union tool to join the data for both layers and get the same result. Western Washington University has a helpful how-to <a href="http://www.wwu.edu/huxley/spatial/tut/erase.htm">here</a>.</p>
 <p>What will be left of our census tracts is whown below in green.</p>
-<p><img src="attachment:image.png" alt="image.png"></p>
+<p><img src="../Resources/IMAGE3.png" alt="image.png"></p>
 
 </div>
 </div>
@@ -12382,7 +12382,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Now-we-can-see-the-dots-on-a-map!">Now we can see the dots on a map!<a class="anchor-link" href="#Now-we-can-see-the-dots-on-a-map!">&#182;</a></h1><p>The image below shows all of the dots in blue for scale=25. You can control the color using the 'Level' field later to contrast different degree types. Remember, the placement of the dots within the dasymetric census tract in random so a repeat of this process won't have dots in exactely the same place. But the number of dots per census tract would remain the same.</p>
-<p><img src="attachment:image.png" alt="image.png"></p>
+<p><img src="../Resources/IMAGE4.png" alt="image.png"></p>
 <h1 id="From-here-you-can-upload-the-shapefiles-to-a-service-like-Mapbox-Studio">From here you can upload the shapefiles to a service like Mapbox Studio<a class="anchor-link" href="#From-here-you-can-upload-the-shapefiles-to-a-service-like-Mapbox-Studio">&#182;</a></h1><p>This does not require linux, or bash on the newer versions of Windows 10, but mapbox may limit you to their pre-defined zoom levels.</p>
 <h1 id="Or,-define-your-own-zoom-levels-by-making-.MBtiles-using-open-source-tools.">Or, define your own zoom levels by making .MBtiles using open source tools.<a class="anchor-link" href="#Or,-define-your-own-zoom-levels-by-making-.MBtiles-using-open-source-tools.">&#182;</a></h1><p>We made our own .MBtiles and then uploaded them to Mapbox to be served.</p>
 <h3 id="Frst,-use-the-ogr2ogr-tool-from-the-open-source-GDAL/OGR-library-to-convert-the-shapefiles-to-GeoJSON.">Frst, use the <a href="http://www.gdal.org/">ogr2ogr tool from the open source GDAL/OGR library</a> to convert the shapefiles to GeoJSON.<a class="anchor-link" href="#Frst,-use-the-ogr2ogr-tool-from-the-open-source-GDAL/OGR-library-to-convert-the-shapefiles-to-GeoJSON.">&#182;</a></h3><p>Installed GDAL. Make a new, empty folder data/geojson. Using the command line, cd into the /data folder and run the tool with the following commands to convert each of the Shapefiles to geojson:</p>
