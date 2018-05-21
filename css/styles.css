@@ -119,7 +119,7 @@ font-style:italic
   h3 {margin-bottom: 3px; font-size: 0.8em;}
   #DotNumbers {font-size: 1em;}
   #legend h4 {display: none}
-  #legend {height: 178px;}
+  #legend {height: 160px;}
   .mapboxgl-ctrl-top-right {display: none;}
   #menu {display: none;}
 }
