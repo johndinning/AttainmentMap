@@ -6,7 +6,7 @@ var layerids = [{ id: 'Attainment10', minzoom: 13, maxzoom: 16.1, text: '10_dots
 { id: 'Attainment50', minzoom: 9, maxzoom: 10.99999, text: '50_dots', dots: '50' },
 { id: 'Attainment100', minzoom: 7, maxzoom: 8.99999, text: '100_dots', dots: '100' },
 { id: 'Attainment150', minzoom: 5, maxzoom: 6.99999, text: '150_dots', dots: '150' }]
-
+ 
 var colors = [['Assoc', '#84ddff'],
 ['Bacc', '#0097d2'],
 ['GradPro', '#005f84'],
