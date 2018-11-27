@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang='en'>
- 
+
 <head>
   <meta charset="utf-8" />
   <link rel="icon" href="Resources/Texas.ico" type="image/x-ico" sizes="16x16">
@@ -9,7 +9,7 @@
   <title>Educational Attainment in Texas</title>
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@TXHigherEdBoard" />
-  <meta name="twitter:creator" content="@johndinning"/>
+  <meta name="twitter:creator" content="@johndinning" />
   <meta name="description" content="A map of the educational attainment of 25 to 34 year olds in Texas.">
   <meta name="keywords" content="Texas Educated Population 60x30TX Attainment">
   <meta name="author" content="John Dinning">
@@ -25,14 +25,16 @@
   <link href='css/buttons.css' rel='stylesheet' />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date(); a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     ga('create', 'UA-104524078-1', 'auto');
     ga('send', 'pageview');
   </script>
-  
+
 </head>
 
 <body>
@@ -41,25 +43,32 @@
   <div id='mapid'></div>
 
   <div id='map-overlay'>
-    <div id="THECB"><a href="http://www.60x30tx.com/" target="_blank" rel="noopener noreferrer"> <img id=logo src="Resources/Logo_cut.png" alt="logo" style="width:100px;"> </a>
+    <div id="THECB"><a href="http://www.60x30tx.com/" target="_blank" rel="noopener noreferrer"> <img id=logo src="Resources/Logo_cut.png"
+          alt="logo" style="width:100px;"> </a>
       <h1>Texas' Educated Population Ages 25 - 34</h1>
     </div>
   </div>
 
   <div id='legend'>
-    <div id='legendheader'><h3>Each dot represents about <span id='DotNumbers'></span> people.</h3></div>
+    <div id='legendheader'>
+      <h3>Each dot represents about <span id='DotNumbers'></span> people.</h3>
+    </div>
     <h4>Higher Education Degree</h4>
     <div id='GradPro' class='clickable'><span id='GradPro_' style='background-color: #005f84'></span>Graduate/Professional</div>
     <div id='Bacc' class='clickable'><span id='Bacc_' style='background-color: #0097d2'></span>Bachelor's</div>
     <div id='Assoc' class='clickable'><span id='Assoc_' style='background-color: #84ddff'></span>Associate</div>
     <h4>Some Higher Education</h4>
-    <div id='SomeHE' class='clickable'><span id='SomeHE_' style='background-color: #f6d61a'></span>Certificate holders or non-completers</div> 
+    <div id='SomeHE' class='clickable'><span id='SomeHE_' style='background-color: #f6d61a'></span>Certificate holders
+      or non-completers</div>
     <h4>No Higher Education Degree</h4>
-    <div id='HSunder' class='clickable'><span id='HSunder_' style='background-color: #a81d40'></span>High school diploma or less</div> 
-    
+    <div id='HSunder' class='clickable'><span id='HSunder_' style='background-color: #a81d40'></span>High school
+      diploma or less</div>
+
     <div id='info' style="font-size: 0.75em; margin-left: 10px;"><br>
-      <a href="https://github.com/TexasHigherEducationCoordinatingBoard/AttainmentMap" target="_blank" rel="noopener noreferrer"> <img id=github src="Resources/GitHub-Mark-32px.png" alt="logo"> </a>
-      <a href="Resources/AboutTheMap.html" target="_blank" rel="noopener noreferrer">Additional information about the map.</a>
+      <a href="https://github.com/TexasHigherEducationCoordinatingBoard/AttainmentMap" target="_blank" rel="noopener noreferrer">
+        <img id=github src="Resources/GitHub-Mark-32px.png" alt="logo"> </a>
+      <a href="Resources/AboutTheMap.html" target="_blank" rel="noopener noreferrer">Additional information about the
+        map.</a>
     </div>
 
 

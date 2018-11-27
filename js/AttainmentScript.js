@@ -6,7 +6,7 @@ var layerids = [{ id: 'Attainment10', minzoom: 13, maxzoom: 16.1, text: '10_dots
 { id: 'Attainment50', minzoom: 9, maxzoom: 10.99999, text: '50_dots', dots: '50' },
 { id: 'Attainment100', minzoom: 7, maxzoom: 8.99999, text: '100_dots', dots: '100' },
 { id: 'Attainment150', minzoom: 3, maxzoom: 6.99999, text: '150_dots', dots: '150' }]
- 
+
 var colors = [['Assoc', '#84ddff'],
 ['Bacc', '#0097d2'],
 ['GradPro', '#005f84'],
@@ -53,7 +53,7 @@ map.on('load', function () {
     map.addLayer({
         'id': 'MaskLayer',
         'type': 'fill',
-        'source': 
+        'source':
         {
             'type': 'geojson',
             'data': masked
@@ -64,12 +64,12 @@ map.on('load', function () {
             'fill-opacity': 0.8
         }
     }, "state");
-        map.addLayer({
+    map.addLayer({
         "id": "TexasOutline",
         "type": "line",
         "source": {
-                'type': 'geojson',
-                'data': masked
+            'type': 'geojson',
+            'data': masked
         },
         "paint": {
             "line-color": "rgba(0,0,0, 1)",
@@ -178,7 +178,7 @@ map.on('load', function () {
                 2,
                 3
             ],
-            "line-color": "rgba(0, 95, 132, 1)", //#005F84
+            "line-color": "rgba(0, 95, 132, 1)",
             "line-width": 1
         }
     }, 'state');
