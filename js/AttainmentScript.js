@@ -5,7 +5,7 @@ var layerids = [{ id: 'Attainment10', minzoom: 13, maxzoom: 16.1, text: '10_dots
 { id: 'Attainment25', minzoom: 11, maxzoom: 12.99999, text: '25_dots', dots: '25' },
 { id: 'Attainment50', minzoom: 9, maxzoom: 10.99999, text: '50_dots', dots: '50' },
 { id: 'Attainment100', minzoom: 7, maxzoom: 8.99999, text: '100_dots', dots: '100' },
-{ id: 'Attainment150', minzoom: 5, maxzoom: 6.99999, text: '150_dots', dots: '150' }]
+{ id: 'Attainment150', minzoom: 3, maxzoom: 6.99999, text: '150_dots', dots: '150' }]
  
 var colors = [['Assoc', '#84ddff'],
 ['Bacc', '#0097d2'],
@@ -13,42 +13,70 @@ var colors = [['Assoc', '#84ddff'],
 ['HSunder', '#a81d40'],
 ['SomeHE', '#f6d61a']] //Changed to lighter yellow from #f6b11a
 
+document.getElementById("DotNumbers").textContent = 150
+
+
 // Set max bounds
 var bounds = [
     [-140, 15], // Southwest coordinates
     [-60, 45]  // Northeast coordinates
 ];
-bbox = [[-107.02, 25.62], [-93.38, 36.72]]; //set narrow bounds for loading map
+bbox = [[-107.02, 25.62], [-93.38, 36.72]]; //set narrow bounds for when loading map - makes the map "pop" on load
 
-document.getElementById("DotNumbers").textContent = 150
+//Mask everything that's not Texas using turf - Mask (downloaded a mini turf.js with only the Mask method)
+var polygon = turf.helpers.polygon(Texas.features[0].geometry.coordinates);
+var mask = turf.helpers.polygon([[[-140, 15], [-60, 15], [-60, 45], [-140, 45], [-140, 15]]]);
+var masked = turf.mask(polygon, mask);
 
 // initialize the mapbox map here
 mapboxgl.accessToken = 'pk.eyJ1Ijoiam9obmRpbm5pbmciLCJhIjoiY2oxazR5NjNvMDFveDJ5b2FzbWZwbjFpbiJ9.bixlFwP8Kf43qHa7Z6XK8g';
 var map = new mapboxgl.Map({
-    // container id
-    container: 'mapid',
-    // style location
+    container: 'mapid', // container id
     style: attainmentStyle,
-    // starting position
-    center: [-99.19, 31.30],
+    center: [-99.19, 31.30],     // starting position
     zoom: 5,
     maxZoom: 16,
-    minZoom: 5,
+    minZoom: 3,
     maxBounds: bounds // Sets bounds as max
 });
-
-
 
 // Add the tile layers from mapbox
 map.on('load', function () {
     var navigator = new mapboxgl.NavigationControl();
     map.addControl(navigator, 'top-right');
+    map.fitBounds(bbox, linear = true); //doesn't work on mobile when minZoom=5 (Dec 2018 changed minZoom to = 4)
     // Update this source when updating ACS data
     map.addSource('Attainment', {
         'type': 'vector',
         'url': 'mapbox://johndinning.54qpiutf'
     });
-    //map.fitBounds(bbox, linear = true); //doesn't work on mobile when minzoom=5
+    map.addLayer({
+        'id': 'MaskLayer',
+        'type': 'fill',
+        'source': 
+        {
+            'type': 'geojson',
+            'data': masked
+        },
+        'layout': {},
+        'paint': {
+            'fill-color': '#FFF',
+            'fill-opacity': 0.8
+        }
+    }, "state");
+        map.addLayer({
+        "id": "TexasOutline",
+        "type": "line",
+        "source": {
+                'type': 'geojson',
+                'data': masked
+        },
+        "paint": {
+            "line-color": "rgba(0,0,0, 1)",
+            "line-width": 2,
+            "line-opacity": 0.7
+        }
+    }, 'state');
     map.addLayer({
         'id': 'Attainment150',
         'type': 'circle',
@@ -56,7 +84,6 @@ map.on('load', function () {
         'source-layer': 'Attainment150',
         'paint': {
             'circle-radius': {
-                //'base': .7,
                 'stops': [[5, .8], [7, 1.1]]
             },
             'circle-color': {
@@ -84,7 +111,6 @@ map.on('load', function () {
             }
         }
     }, "state");
-
     map.addLayer({
         'id': 'Attainment50',
         'type': 'circle',
@@ -137,20 +163,6 @@ map.on('load', function () {
         }
     }, 'state');
     map.addLayer({
-        "id": "TexasOutline",
-        "type": "line",
-        "source": {
-            'type': 'vector',
-            'url': 'mapbox://johndinning.7rzn4kl6'
-        },
-        'source-layer': 'Texas-d92wyb',
-        "paint": {
-            "line-color": "rgba(0,0,0, 1)",
-            "line-width": 2,
-            "line-opacity": 0.7
-        }
-    }, 'state');
-    map.addLayer({
         'id': 'Higher Education Regions',
         'type': 'line',
         'source': {
@@ -199,7 +211,6 @@ map.on('load', function () {
         }
     });
 });
-
 
 // Generate click event for to turn Attainment categories on and off
 var filter = ["in", "level", 'GradPro', 'Bacc', 'Assoc', 'SomeHE', 'HSunder'];
