@@ -60,7 +60,7 @@ map.on('load', function () {
         },
         'layout': {},
         'paint': {
-            'fill-color': '#FFF',
+            'fill-color': '#a9c2c9',
             'fill-opacity': 0.8
         }
     }, "state");
@@ -195,7 +195,7 @@ map.on('load', function () {
             }
         }
     });
-    map.style.sourceCaches['attribution-layer']._source.attribution = "&copy; THECB 2018".link("http://www.thecb.state.tx.us/") + " | ACS 2012-2016 from NHGIS".link("https://www.nhgis.org/");
+    map.style.sourceCaches['attribution-layer']._source.attribution = "&copy; THECB 2018".link("http://www.thecb.state.tx.us/") + " | ACS 2013-2017 from NHGIS".link("https://www.nhgis.org/");
     // Set zoom range for each layer
     layerids.map(function (id) {
         map.setLayerZoomRange(id.id, id.minzoom, id.maxzoom);
