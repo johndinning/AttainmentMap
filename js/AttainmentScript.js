@@ -45,6 +45,7 @@ map.on('load', function () {
     var navigator = new mapboxgl.NavigationControl();
     map.addControl(navigator, 'top-right');
     map.fitBounds(bbox, linear = true); //doesn't work on mobile when minZoom=5 (Dec 2018 changed minZoom to = 4)
+    map.touchZoomRotate.disableRotation(); // disable map rotation using touch rotation gesture
     // Update this source when updating ACS data
     map.addSource('Attainment', {
         'type': 'vector',
