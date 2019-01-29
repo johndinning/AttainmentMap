@@ -11775,12 +11775,12 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="This-Jupyter-notebook-describes-the-steps-necessary-to-recreate-the-data-for-the-Texas-Attainment-Map.">This Jupyter notebook describes the steps necessary to recreate the data for the Texas Attainment Map.<a class="anchor-link" href="#This-Jupyter-notebook-describes-the-steps-necessary-to-recreate-the-data-for-the-Texas-Attainment-Map.">&#182;</a></h1><p>The code below describes in detail the process of converting the American Community Surevy data made available through <a href="https://www.nhgis.org">IPUMS-NHGIS</a> to dots on a map. This project requires the following files which can be downloaded from NHGIS:</p>
+<h1 id="This-Jupyter-notebook-describes-the-steps-necessary-to-recreate-the-data-for-the-Texas-Attainment-Map.">This Jupyter notebook describes the steps necessary to recreate the data for the Texas Attainment Map.<a class="anchor-link" href="#This-Jupyter-notebook-describes-the-steps-necessary-to-recreate-the-data-for-the-Texas-Attainment-Map.">&#182;</a></h1><p>The code below describes in detail the process of converting the American Community Surevy data made available through to dots on a map. This project requires the following files which can be downloaded from <a href="https://www.nhgis.org">IPUMS-NHGIS</a> :</p>
 <ul>
-<li>2010 census block polygons for Texas</li>
-<li>2010 census table P1, Total Population, for census blocks</li>
-<li>2012-2016 5-year summary statistics for table B15001, educational attainment by age for each census tract. The census tract field (GISJOIN) will be used to merge the data to the census tract polygons.</li>
-<li>2016 census tract polygons (we downloaded the entire US census tract file, you will only need Texas)</li>
+<li>2010 census block polygons for Texas. </li>
+<li>2010 census table P1, Total Population, for census blocks. </li>
+<li>2013-2017 5-year summary statistics for table B15001, educational attainment by age for census tracts in Texas. The census tract field (GISJOIN) will be used to merge the data to the census tract polygons.</li>
+<li>2017 census tract polygons for Texas.</li>
 </ul>
 <h3 id="You-will-need-access-to:">You will need access to:<a class="anchor-link" href="#You-will-need-access-to:">&#182;</a></h3><ul>
 <li>ArcGIS (peferably with the advanced license - however, there are workarounds if you only have the basic license)</li>
@@ -11869,8 +11869,8 @@ div#notebook {
 
 <span class="c1">#The CensusBlock CSV file for Texas where H7v001=0 [i.e. population=0]</span>
 
-<span class="c1">#Convert zipped CensusBlock csv file to dBase and limit to just Texas blocks where population=0.</span>
-<span class="n">CensusBlocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0005_csv/nhgis0005_ds172_2010_block.csv&quot;</span><span class="p">,</span>  <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">39</span><span class="p">])</span>
+<span class="c1">#Read in CensusBlock csv file and limit to just blocks where population=0.</span>
+<span class="n">CensusBlocks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0004_csv/nhgis0004_ds172_2010_block.csv&quot;</span><span class="p">,</span>  <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">39</span><span class="p">])</span>
 
 <span class="n">NoPopBlocks</span><span class="o">=</span><span class="n">CensusBlocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">CensusBlocks</span><span class="p">[</span><span class="s1">&#39;H7V001&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">]</span>
 
@@ -11927,7 +11927,7 @@ div#notebook {
 <span class="n">arcpy</span><span class="o">.</span><span class="n">TableToTable_conversion</span><span class="p">(</span><span class="s2">&quot;data/NoPopBlocks.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">,</span> <span class="s2">&quot;NoPopBlocksTable&quot;</span><span class="p">)</span>
 
 <span class="c1">#Put TX census block polygons in GDB.</span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">FeatureClassToGeodatabase_conversion</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0005_shapefile_tl2010_480_block_2010/TX_block_2010.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">)</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">FeatureClassToGeodatabase_conversion</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0004_shape/TX_block_2010.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;data/Attainment.gdb&quot;</span><span class="p">)</span>
 
 <span class="c1">#Index GISJOIN fields for improved performamce</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">AddIndex_management</span> <span class="p">(</span><span class="s2">&quot;data/Attainment.gdb/NoPopBlocksTable&quot;</span><span class="p">,</span> <span class="s2">&quot;GISJOIN&quot;</span><span class="p">,</span> <span class="s2">&quot;index1&quot;</span><span class="p">)</span>
@@ -12050,7 +12050,7 @@ div#notebook {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Load Texas Census Tracts</span>
 
 <span class="c1">#Make temporary CensusTract Layer</span>
-<span class="n">arcpy</span><span class="o">.</span><span class="n">MakeFeatureLayer_management</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0006_shapefile_tl2016_us_tract_2016/us_tract_2016.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;CensusTractLayer&quot;</span><span class="p">)</span>
+<span class="n">arcpy</span><span class="o">.</span><span class="n">MakeFeatureLayer_management</span><span class="p">(</span><span class="s2">&quot;data/OriginalDownloadfromNHGIS/nhgis0013_shapefile_tl2017_us_tract_2017/US_tract_2017.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;CensusTractLayer&quot;</span><span class="p">)</span>
 
 <span class="c1">#Select just the TX Census Tracts and save in GDB</span>
 <span class="n">arcpy</span><span class="o">.</span><span class="n">SelectLayerByAttribute_management</span><span class="p">(</span><span class="s2">&quot;CensusTractLayer&quot;</span><span class="p">,</span> <span class="s2">&quot;NEW_SELECTION&quot;</span><span class="p">,</span> <span class="s2">&quot; STATEFP = &#39;48&#39; &quot;</span><span class="p">)</span>
@@ -12150,72 +12150,89 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Prepare-the-NHGIS-attainment-data-by-census-tract--before-continuing-to-the-next-step.">Prepare the NHGIS attainment data by census tract  before continuing to the next step.<a class="anchor-link" href="#Prepare-the-NHGIS-attainment-data-by-census-tract--before-continuing-to-the-next-step.">&#182;</a></h2><p>I used SAS to generate the number of dots per level of attainment at each scale (1 dot =10 people, 25 people, 50 people, 100 people, and 150 people) for each census tract (GISJOIN field).</p>
-<p>The output file is: <em>data\NHGIS0001_PreparedForMerge.csv</em></p>
-<h3 id="I-used-the-following-SAS-code-for-preparing-the-NHGIS-attainment-data:">I used the following SAS code for preparing the NHGIS attainment data:<a class="anchor-link" href="#I-used-the-following-SAS-code-for-preparing-the-NHGIS-attainment-data:">&#182;</a></h3><div class="highlight"><pre><span></span><span class="kr">PROC IMPORT </span><span class="k">OUT</span>= WORK<span class="m">.</span>NHGIS0001
-            DATAFILE= <span class="s">&quot;data\OriginalDownloadfromNHGIS\nhgis0005_csv\nhgis0005_ds226_20165_2016_tract.csv&quot;</span>            
+<h2 id="Prepare-the-ACS-attainment-data-by-census-tract--before-continuing-to-the-next-step.">Prepare the ACS attainment data by census tract  before continuing to the next step.<a class="anchor-link" href="#Prepare-the-ACS-attainment-data-by-census-tract--before-continuing-to-the-next-step.">&#182;</a></h2><p>I used SAS to generate the number of dots per level of attainment at each scale (1 dot =10 people, 25 people, 50 people, 100 people, and 150 people) for each census tract.</p>
+<p>The output file is: <em>data\DotCounts_PreparedForMerge.csv</em></p>
+<h3 id="I-used-the-following-SAS-code-for-preparing-the-ACS-attainment-data:">I used the following SAS code for preparing the ACS attainment data:<a class="anchor-link" href="#I-used-the-following-SAS-code-for-preparing-the-ACS-attainment-data:">&#182;</a></h3><div class="highlight"><pre><span></span><span class="cm">/* </span>
+<span class="cm">This program takes the raw attainment data in the ACS B15001 table downloaded from the </span>
+<span class="cm">IPUMS-NHGIS and prepares the number of dots to show for each census tract </span>
+<span class="cm">at different scales (10, 25, 50, 100, 150).</span>
+<span class="cm">These scales will correspond to different zoom levels in the final map.</span>
+<span class="cm">*/</span>
+
+<span class="kr">PROC IMPORT </span><span class="k">OUT</span>= WORK<span class="m">.</span>B15001
+     DATAFILE= <span class="s">&quot;\data\OriginalDownloadfromNHGIS\nhgis0013_csv\nhgis0013_ds234_20175_2017_tract.csv&quot;</span> 
      DBMS=CSV <span class="k">REPLACE</span>;
-     GETNAMES=YES;
      DATAROW=<span class="m">2</span><span class="kr">; </span>
 <span class="kr">RUN;</span>
 
-<span class="cm">/* Keep the GISJOIN field and make the following new variables:   </span>
-<span class="cm">            High School or less, Some college no degree, Associates,   </span>
-<span class="cm">            Bachelor&#39;s, Graduate or Professional Degree */</span>
-<span class="kr">data </span>AttainmentRaw;
-<span class="k">set</span> NHGIS0001;
-<span class="k">where</span> STATEA=<span class="s">&#39;48&#39;</span>;
-    Assoc = AGIEE016 + AGIEE057;
-    Bacc =  AGIEE017 + AGIEE058;
-    GradPro =  AGIEE018 + AGIEE059;
-    SomeHE = AGIEE015 + AGIEE056;
-    HSorLess = AGIEE012 + AGIEE013 + AGIEE014 + AGIEE053 + AGIEE054 + AGIEE055;
-    TotalPop =  AGIEE001<span class="kr">;</span>
-<span class="kr">run;</span>
+<span class="cm">/* Keep the GISJOIN field and make the following new variables: </span>
+<span class="cm">        High School or less, Some college no degree, Associates, </span>
+<span class="cm">        Bachelor&#39;s, Graduate or Professional Degree */</span>
 
+<span class="kr">data </span>AttainmentRaw;
+    <span class="k">set</span> B15001;
+    <span class="k">where</span> STATEA=<span class="s">&#39;48&#39;</span>;
+        Assoc = AIEWE016 + AIEWE057;
+        Bacc =  AIEWE017 + AIEWE058;
+        GradPro =  AIEWE018 + AIEWE059;
+        SomeHE = AIEWE015 + AIEWE056;
+        HSorLess = AIEWE012 + AIEWE013 + AIEWE014 + AIEWE053 + AIEWE054 + AIEWE055;
+        TotalPop =  AIEWE001<span class="kr">;</span>
+<span class="kr">run;</span>
 
 <span class="kr">data </span>work<span class="m">.</span>AttainmentbyCensusTract (<span class="k">keep</span>=GISJOIN Assoc10 Assoc25 Assoc50 Assoc100 Assoc150 
         Bacc10 Bacc25 Bacc50 Bacc100 Bacc150 GradPro10 GradPro25 GradPro50 GradPro100 GradPro150 
         HSunder10 HSunder25 HSunder50 HSunder100 HSunder150 SomeHE10 SomeHE25 SomeHE50 SomeHE100 SomeHE150);
     <span class="k">set</span> AttainmentRaw;
 
-    Assoc10=<span class="nb">Round(</span>Assoc/<span class="m">10</span>);
-    Assoc25=<span class="nb">Round(</span>Assoc/<span class="m">25</span>);
-    Assoc50=<span class="nb">Round(</span>Assoc/<span class="m">50</span>);
-    Assoc100=<span class="nb">Round(</span>Assoc/<span class="m">100</span>);
-    Assoc150=<span class="nb">Round(</span>Assoc/<span class="m">150</span>);
+        Assoc10=<span class="nb">Round(</span>Assoc/<span class="m">10</span>);
+        Assoc25=<span class="nb">Round(</span>Assoc/<span class="m">25</span>);
+        Assoc50=<span class="nb">Round(</span>Assoc/<span class="m">50</span>);
+        Assoc100=<span class="nb">Round(</span>Assoc/<span class="m">100</span>);
+        Assoc150=<span class="nb">Round(</span>Assoc/<span class="m">150</span>);
 
-    Bacc10=<span class="nb">Round(</span>Bacc/<span class="m">10</span>);
-    Bacc25=<span class="nb">Round(</span>Bacc/<span class="m">25</span>);
-    Bacc50=<span class="nb">Round(</span>Bacc/<span class="m">50</span>);
-    Bacc100=<span class="nb">Round(</span>Bacc/<span class="m">100</span>);
-    Bacc150=<span class="nb">Round(</span>Bacc/<span class="m">150</span>);
+        Bacc10=<span class="nb">Round(</span>Bacc/<span class="m">10</span>);
+        Bacc25=<span class="nb">Round(</span>Bacc/<span class="m">25</span>);
+        Bacc50=<span class="nb">Round(</span>Bacc/<span class="m">50</span>);
+        Bacc100=<span class="nb">Round(</span>Bacc/<span class="m">100</span>);
+        Bacc150=<span class="nb">Round(</span>Bacc/<span class="m">150</span>);
 
-    GradPro10=<span class="nb">Round(</span>GradPro/<span class="m">10</span>);
-    GradPro25=<span class="nb">Round(</span>GradPro/<span class="m">25</span>);
-    GradPro50=<span class="nb">Round(</span>GradPro/<span class="m">50</span>);
-    GradPro100=<span class="nb">Round(</span>GradPro/<span class="m">100</span>);
-    GradPro150=<span class="nb">Round(</span>GradPro/<span class="m">150</span>);
+        GradPro10=<span class="nb">Round(</span>GradPro/<span class="m">10</span>);
+        GradPro25=<span class="nb">Round(</span>GradPro/<span class="m">25</span>);
+        GradPro50=<span class="nb">Round(</span>GradPro/<span class="m">50</span>);
+        GradPro100=<span class="nb">Round(</span>GradPro/<span class="m">100</span>);
+        GradPro150=<span class="nb">Round(</span>GradPro/<span class="m">150</span>);
 
-    SomeHE10=<span class="nb">Round(</span>SomeHE/<span class="m">10</span>);
-    SomeHE25=<span class="nb">Round(</span>SomeHE/<span class="m">25</span>);
-    SomeHE50=<span class="nb">Round(</span>SomeHE/<span class="m">50</span>);
-    SomeHE100=<span class="nb">Round(</span>SomeHE/<span class="m">100</span>);
-    SomeHE150=<span class="nb">Round(</span>SomeHE/<span class="m">150</span>);
+        SomeHE10=<span class="nb">Round(</span>SomeHE/<span class="m">10</span>);
+        SomeHE25=<span class="nb">Round(</span>SomeHE/<span class="m">25</span>);
+        SomeHE50=<span class="nb">Round(</span>SomeHE/<span class="m">50</span>);
+        SomeHE100=<span class="nb">Round(</span>SomeHE/<span class="m">100</span>);
+        SomeHE150=<span class="nb">Round(</span>SomeHE/<span class="m">150</span>);
 
-    HSunder10=<span class="nb">Round(</span>HSorLess/<span class="m">10</span>);
-    HSunder25=<span class="nb">Round(</span>HSorLess/<span class="m">25</span>);
-    HSunder50=<span class="nb">Round(</span>HSorLess/<span class="m">50</span>);
-    HSunder100=<span class="nb">Round(</span>HSorLess/<span class="m">100</span>);
-    HSunder150=<span class="nb">Round(</span>HSorLess/<span class="m">150</span>)<span class="kr">;</span>
-
+        HSunder10=<span class="nb">Round(</span>HSorLess/<span class="m">10</span>);
+        HSunder25=<span class="nb">Round(</span>HSorLess/<span class="m">25</span>);
+        HSunder50=<span class="nb">Round(</span>HSorLess/<span class="m">50</span>);
+        HSunder100=<span class="nb">Round(</span>HSorLess/<span class="m">100</span>);
+        HSunder150=<span class="nb">Round(</span>HSorLess/<span class="m">150</span>)<span class="kr">;</span>
 <span class="kr">run;</span>
 
-
-
 <span class="kr">proc export </span>data=work<span class="m">.</span>AttainmentbyCensusTract
-            outfile=<span class="s">&quot;data\DotCounts_PreparedForMerge.csv&quot;</span> 
+            outfile=<span class="s">&quot;\data\DotCounts_PreparedForMerge.csv&quot;</span> 
             dbms=csv <span class="k">replace</span><span class="kr">;</span>
+<span class="kr">run;</span>
+
+<span class="c">*Look at 5-year statewide totals from ACS;</span>
+<span class="kr">proc sql;</span>
+<span class="k">create</span> <span class="k">table</span> TXAttainmentTotal <span class="k">as</span>
+<span class="k">select</span> 
+    <span class="nb">sum(</span><span class="m">1</span>*Assoc) <span class="k">as</span> AssocTot,
+    <span class="nb">sum(</span><span class="m">1</span>*Bacc) <span class="k">as</span> BaccTot,
+    <span class="nb">sum(</span><span class="m">1</span>*GradPro) <span class="k">as</span> GradProTot,
+    <span class="nb">sum(</span><span class="m">1</span>*HSorLess) <span class="k">as</span> HSorLessTot,
+    <span class="nb">sum(</span><span class="m">1</span>*SomeHE) <span class="k">as</span> SomeHETot, 
+    <span class="nb">sum(</span><span class="m">1</span>*TotalPop) <span class="k">as</span> TotalPop
+<span class="k">from</span> AttainmentRaw<span class="kr">;</span>
+<span class="kr">quit;</span>
 <span class="kr">run;</span>
 </pre></div>
 <h4 id="The-next-step-joins-the-output-from-SAS-(number-of-dots-per-level-of-attainment-at-5-different-zoom-layers-for-each-census-tract-in-Texas)-to-the-census-tract-polygons.">The next step joins the output from SAS (number of dots per level of attainment at 5 different zoom layers for each census tract in Texas) to the census tract polygons.<a class="anchor-link" href="#The-next-step-joins-the-output-from-SAS-(number-of-dots-per-level-of-attainment-at-5-different-zoom-layers-for-each-census-tract-in-Texas)-to-the-census-tract-polygons.">&#182;</a></h4>
@@ -12395,15 +12412,15 @@ ogr2ogr -f GeoJSON geojson/Attainment150.json Shapefiles/Attainment150.shp -prog
 <p>This outputs .json files of point data.</p>
 <h3 id="The-tippecanoe-tool-takes-.json-data-to-make-.MBtiles.-Read-the-full-documentation-on-GitHub-for-best-results.-We-used-tippecanoe-with-the-following-options-for-the-different-zoom-levels:">The <a href="https://github.com/mapbox/tippecanoe">tippecanoe tool</a> takes .json data to make .MBtiles. Read the full documentation on GitHub for best results. We used tippecanoe with the following options for the different zoom levels:<a class="anchor-link" href="#The-tippecanoe-tool-takes-.json-data-to-make-.MBtiles.-Read-the-full-documentation-on-GitHub-for-best-results.-We-used-tippecanoe-with-the-following-options-for-the-different-zoom-levels:">&#182;</a></h3><p>Install tippecanoe and run the following from the /data folder:</p>
 
-<pre><code>tippecanoe --output=Attainment150.mbtiles geojson/Attainment150.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=7 --minimum-zoom=5 --exclude=CID
+<pre><code>tippecanoe --output=Attainment150.mbtiles geojson/Attainment150.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=7 --minimum-zoom=3 --exclude=CID
 tippecanoe --output=Attainment100.mbtiles geojson/Attainment100.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=9 --minimum-zoom=7 --exclude=CID
 tippecanoe --output=Attainment50.mbtiles geojson/Attainment50.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=11 --minimum-zoom=9 --exclude=CID
 tippecanoe --output=Attainment25.mbtiles geojson/Attainment25.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=13 --minimum-zoom=11 --exclude=CID
 tippecanoe --output=Attainment10.mbtiles geojson/Attainment10.json -r1 --drop-fraction-as-needed --no-feature-limit --no-tile-size-limit --maximum-zoom=16.2 --minimum-zoom=13 --exclude=CID</code></pre>
 <h3 id="Finally,-make-things-easier-by-combining-the-.MBtiles-into-a-single-source-with-tile-join.">Finally, make things easier by combining the .MBtiles into a single source with tile-join.<a class="anchor-link" href="#Finally,-make-things-easier-by-combining-the-.MBtiles-into-a-single-source-with-tile-join.">&#182;</a></h3><p>tile-join comes with tippecanoe. Combine the .MBtiles with the following:</p>
 
-<pre><code>tile-join -o Attainment2012_2016.mbtiles Attainment150.mbtiles Attainment100.mbtiles Attainment50.mbtiles Attainment25.mbtiles Attainment10.mbtiles</code></pre>
-<p>You can serve your own MBtiles. We upload ours to Mapbox Studio.</p>
+<pre><code>tile-join -o Attainment2013_2017.mbtiles Attainment150.mbtiles Attainment100.mbtiles Attainment50.mbtiles Attainment25.mbtiles Attainment10.mbtiles</code></pre>
+<p>You can serve your own MBtiles with a tile server. We uploaded ours to Mapbox Studio.</p>
 <p>For questions about this code, contact John Dinning at <a href="mailto:john.dinning@THECB.state.tx.us">john.dinning@THECB.state.tx.us</a></p>
 
 </div>

@@ -44,12 +44,12 @@ var map = new mapboxgl.Map({
 map.on('load', function () {
     var navigator = new mapboxgl.NavigationControl();
     map.addControl(navigator, 'top-right');
-    map.fitBounds(bbox, linear = true); //doesn't work on mobile when minZoom=5 (Dec 2018 changed minZoom to = 4)
+    map.fitBounds(bbox, linear = true); //doesn't work on mobile when minZoom=5 (Dec 2018 changed minZoom to = 3)
     map.touchZoomRotate.disableRotation(); // disable map rotation using touch rotation gesture
     // Update this source when updating ACS data
     map.addSource('Attainment', {
         'type': 'vector',
-        'url': 'mapbox://johndinning.54qpiutf'
+        'url': 'mapbox://johndinning.3b04x36e'
     });
     map.addLayer({
         'id': 'MaskLayer',
@@ -196,7 +196,7 @@ map.on('load', function () {
             }
         }
     });
-    map.style.sourceCaches['attribution-layer']._source.attribution = "&copy; THECB 2018".link("http://www.thecb.state.tx.us/") + " | ACS 2013-2017 from NHGIS".link("https://www.nhgis.org/");
+    map.style.sourceCaches['attribution-layer']._source.attribution = "&copy; THECB 2019".link("http://www.thecb.state.tx.us/") + " | ACS 2013-2017 from NHGIS".link("https://www.nhgis.org/");
     // Set zoom range for each layer
     layerids.map(function (id) {
         map.setLayerZoomRange(id.id, id.minzoom, id.maxzoom);
